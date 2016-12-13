@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+.state-boundary {
+  fill: none;
+  stroke: #fff;
+  pointer-events: none;
+}
+
+</style>
+<body>
+<script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<script src="//d3js.org/topojson.v1.min.js"></script>
+<script>
+
+
+d3.json("ctba-bairros-transformed.topo.json", function(error, cwb) {
+  if (error) return console.error(error);
+  console.log(cwb);
+
+var width = 1060,
+    height = 1060;
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+
+  var subunits = topojson.feature(cwb, cwb.objects.bairros);
+
+  var projection = d3.geo.mercator()
+    .scale(1)
+    // .center(-25.45216,-49.2676407)
+    .translate([width / 2, height / 2]);
+
+  var path = d3.geo.path()
+    .projection(null);
+
+  svg.append("path")
+    .datum(subunits)
+    .attr("fill", "red")
+     .attr("stroke", "#000")
+     .attr("stroke-width", 1)
+     .attr("stroke-opacity", 1)
+    .attr("d", path);
+
+
+});
+
+</script>

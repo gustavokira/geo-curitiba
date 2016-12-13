@@ -23,18 +23,23 @@ Os arquivos foram criados na plataforma OS X (El Capitain). O processo deve ser 
 instalar shapefile e geo2topo. O `-g` significa que o pacote será instalado globamente.
 
 ```
-npm install -g shapefile geo2topo
-
+npm install -g shapefile geo2topo d3-geo-projection topojson
 ```
 
 No terminal, rodar os seguintes comandos, substituindo pelo nome dos arquivos: 
 
 shp2json <arquivo-de-origem>.shp -o <arquivo-de-destino>.json
-geo2topo <arquivo-de-origem> >  <arquivo-de-destino>.json
+geo2topo <nome-do-conjunto>=<arquivo-de-origem> >  <arquivo-de-destino>.json
 
 ex: 
-shp2json DIVISA_DE_BAIRROS/DIVISA_DE_BAIRROS.shp -o cwb-bairros.geo.json
-geo2topo cwb-bairros.geo.json > cwb-bairros.topo.json
+shp2json DIVISA_DE_BAIRROS/DIVISA_DE_BAIRROS.shp -o ctba-bairros.geo.json
+geo2topo bairros=ctba-bairros.geo.json > ctba-bairros.topo.json
 
 obs 1: o arquivo topoJson é gerado a partir do geoJson.
 obs 2: shp2json usa os outros arquivos (.dbf) para gerar as propriedades.
+
+mesmo problema com a definição da projeção: https://github.com/mbloch/mapshaper/issues/96
+
+
+
+geoproject 'd3.geoConicEqualArea().parallels([34, 40.5]).rotate([180, 0]).fitSize([960, 960], d)' < der.json > der-albers.json
