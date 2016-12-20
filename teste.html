@@ -29,16 +29,34 @@ var svg = d3.select("body").append("svg")
 
   var subunits = topojson.feature(cwb, cwb.objects.bairros);
 
-  var projection = d3.geo.mercator()
-    .scale(100)
-    .rotate(90,0);
-    // .center(-25.45216,-49.2676407)
-    // .translate([width / 2, height / 2]);
+  var path = d3.geo.path()
+    .projection(null);
+
+  svg.append("path")
+    .datum(subunits)
+    .attr("fill", "none")
+     .attr("stroke", "#000")
+     .attr("stroke-width", 1)
+     .attr("stroke-opacity", 1)
+    .attr("d", path);
+});
+
+d3.json("locais-votacao.json", function(error, cwb) {
+  if (error) return console.error(error);
+  console.log(cwb);
+
+var width = 1060,
+    height = 1060;
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+
+  var subunits = topojson.feature(cwb, cwb.objects.bairros);
 
   var path = d3.geo.path()
     .projection(null);
-// .projection(projection);
-    
 
   svg.append("path")
     .datum(subunits)
@@ -47,8 +65,6 @@ var svg = d3.select("body").append("svg")
      .attr("stroke-width", 1)
      .attr("stroke-opacity", 1)
     .attr("d", path);
-
-
 });
 
 </script>

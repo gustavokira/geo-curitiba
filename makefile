@@ -5,7 +5,7 @@ toGeoJson:
 	
 transform: toGeoJson
 	geoproject 'd3.geoMercator().rotate([0, 0]).fitSize([960, 960], d)' < ctba-bairros-original.geo.json > ctba-bairros-transformed.geo.json
-
+	
 toTopo: transform
 	geo2topo bairros=ctba-bairros-transformed.geo.json > ctba-bairros-transformed.topo.json
 
