@@ -15,7 +15,7 @@
 <script>
 
 
-d3.json("ctba-bairros-transformed.topo.json", function(error, cwb) {
+d3.json("ctba-bairros.topo.json", function(error, cwb) {
   if (error) return console.error(error);
   console.log(cwb);
 
@@ -30,12 +30,15 @@ var svg = d3.select("body").append("svg")
   var subunits = topojson.feature(cwb, cwb.objects.bairros);
 
   var projection = d3.geo.mercator()
-    .scale(1)
+    .scale(100)
+    .rotate(90,0);
     // .center(-25.45216,-49.2676407)
-    .translate([width / 2, height / 2]);
+    // .translate([width / 2, height / 2]);
 
   var path = d3.geo.path()
     .projection(null);
+// .projection(projection);
+    
 
   svg.append("path")
     .datum(subunits)

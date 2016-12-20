@@ -20,10 +20,10 @@ Os arquivos foram criados na plataforma OS X (El Capitain). O processo deve ser 
 [topojson](https://github.com/topojson/topojson)
 [shapefile](https://github.com/mbostock/shapefile)
 
-instalar shapefile e geo2topo. O `-g` significa que o pacote será instalado globamente.
+instalar shapefile e geo2topo. O `-g` significa que o pacote será instalado de forma global.
 
 ```
-npm install -g shapefile geo2topo d3-geo-projection topojson
+npm install -g shapefile geo2topo d3-geo-projection topojson topojson-simplify topojson-client
 ```
 
 No terminal, rodar os seguintes comandos, substituindo pelo nome dos arquivos: 
@@ -40,6 +40,6 @@ obs 2: shp2json usa os outros arquivos (.dbf) para gerar as propriedades.
 
 mesmo problema com a definição da projeção: https://github.com/mbloch/mapshaper/issues/96
 
-
+https://medium.com/@mbostock/command-line-cartography-part-3-1158e4c55a1e#.g9dnr97lp
 
 geoproject 'd3.geoConicEqualArea().parallels([34, 40.5]).rotate([180, 0]).fitSize([960, 960], d)' < der.json > der-albers.json
