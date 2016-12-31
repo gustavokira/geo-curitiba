@@ -2,69 +2,116 @@
 <meta charset="utf-8">
 <style>
 
-.state-boundary {
-  fill: none;
-  stroke: #fff;
-  pointer-events: none;
+html{
+  background: #fff;
 }
-
+body{
+  padding: 50px;
+}
 </style>
 <body>
-<script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<script src="//d3js.org/d3.v4.min.js" charset="utf-8"></script>
+<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
 <script src="//d3js.org/topojson.v1.min.js"></script>
 <script>
 
 
-d3.json("ctba-bairros.topo.json", function(error, cwb) {
-  if (error) return console.error(error);
-  console.log(cwb);
-
-var width = 1060,
-    height = 1060;
+var width = 450,
+    height = 450;
 
 var svg = d3.select("body").append("svg")
     .attr("width", width)
-    .attr("height", height);
+    .attr("height", height)
+
+svg.append("g").attr("class","base");
+svg.append("g").attr("class","bairros");
+svg.append("g").attr("class","lines");
+svg.append("g").attr("class","regionais");
+
+var projection = null;
+var path = null;
+var lines = "json/divisa_de_bairros.topo.json";
+var base = "json/contorno_de_curitiba.topo.json";
+var regionais = "json/divisa_de_regionais.topo.json";
+var bairros = "json/bairros.topo.json";
+
+d3.json(base, function(error, data) {
+    if (error) return console.error(error);
+    
+    var bairros = topojson.feature(data, data.objects.bairros);
+    
+    projection = d3.geoMercator()
+    .rotate([0, 0])
+    .fitSize([width, height],bairros);
+    path = d3.geoPath().projection(projection);
+
+      // svg.select("g.base")
+      // .append("path")
+      // .datum(bairros)
+      // .attr("fill", "#000")
+      // .attr("d", path);
+
+      cb();
+  });
+
+function cb(){
+  d3.json(regionais, function(error, data) {
+    if (error) return console.error(error);
+    
+    var regionais = topojson.feature(data, data.objects.regionais);
+    
+
+      svg.select("g.regionais")
+      .append("path")
+      .datum(regionais)
+      .attr("fill", "none")
+      .attr("stroke", function(d){ return "#fff";})
+      .attr("stroke-width", 1)
+      .attr("stroke-opacity", 0.5)
+      .attr("d", path);
+  });
+
+  d3.json(lines, function(error, data) {
+    if (error) return console.error(error);
+    
+    var bairros = topojson.feature(data, data.objects.bairros);
+
+      svg.select("g.lines")
+      .append("path")
+      .datum(bairros)
+      .attr("fill", "none")
+      .attr("stroke", function(d){ return "#fff";})
+      .attr("stroke-width", 0.1)
+      .attr("stroke-opacity", 0.5)
+      .attr("d", path);
+  });
+
+  d3.json(bairros, function(error, data) {
+    if (error) return console.error(error);
+    
+    var bairros = topojson.feature(data, data.objects.bairros).features;
+
+    var max = d3.max(bairros, function(d) { return d.properties.area; });
+    var min = d3.min(bairros, function(d) { return d.properties.area; });
+
+    var color = d3.scalePow().exponent(1/100)
+    .domain([min,max])
+    .range([0.25,0.75]);
 
 
-  var subunits = topojson.feature(cwb, cwb.objects.bairros);
+      svg.select("g.bairros")
+      .selectAll("path")
+      .data(bairros)
+      .enter().append("path")
+      .attr("stroke", "none")
+      .attr("fill", function(d) { return d3.interpolateYlGnBu(color(d.properties.area)); })
+      .attr("d", path);
 
-  var path = d3.geo.path()
-    .projection(null);
+  });
 
-  svg.append("path")
-    .datum(subunits)
-    .attr("fill", "none")
-     .attr("stroke", "#000")
-     .attr("stroke-width", 1)
-     .attr("stroke-opacity", 1)
-    .attr("d", path);
-});
-
-d3.json("locais-votacao.json", function(error, cwb) {
-  if (error) return console.error(error);
-  console.log(cwb);
-
-var width = 1060,
-    height = 1060;
-
-var svg = d3.select("body").append("svg")
-    .attr("width", width)
-    .attr("height", height);
+}
 
 
-  var subunits = topojson.feature(cwb, cwb.objects.bairros);
-
-  var path = d3.geo.path()
-    .projection(null);
-
-  svg.append("path")
-    .datum(subunits)
-    .attr("fill", "red")
-     .attr("stroke", "#000")
-     .attr("stroke-width", 1)
-     .attr("stroke-opacity", 1)
-    .attr("d", path);
-});
 
 </script>
+</body>
