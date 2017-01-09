@@ -27,12 +27,14 @@ svg.append("g").attr("class","base");
 svg.append("g").attr("class","bairros");
 svg.append("g").attr("class","lines");
 svg.append("g").attr("class","regionais");
+svg.append("g").attr("class","zonas");
 
 var projection = null;
 var path = null;
 var lines = "json/divisa_de_bairros.topo.json";
 var base = "json/contorno_de_curitiba.topo.json";
 var regionais = "json/divisa_de_regionais.topo.json";
+var zonas = "json/divisa_e_contorno_de_zonas_eleitorais.topo.json";
 var bairros = "json/bairros.topo.json";
 
 d3.json(base, function(error, data) {
@@ -55,21 +57,7 @@ d3.json(base, function(error, data) {
   });
 
 function cb(){
-  d3.json(regionais, function(error, data) {
-    if (error) return console.error(error);
-    
-    var regionais = topojson.feature(data, data.objects.regionais);
-    
-
-      svg.select("g.regionais")
-      .append("path")
-      .datum(regionais)
-      .attr("fill", "none")
-      .attr("stroke", function(d){ return "#fff";})
-      .attr("stroke-width", 1)
-      .attr("stroke-opacity", 0.5)
-      .attr("d", path);
-  });
+  
 
   d3.json(lines, function(error, data) {
     if (error) return console.error(error);
@@ -83,6 +71,37 @@ function cb(){
       .attr("stroke", function(d){ return "#fff";})
       .attr("stroke-width", 0.1)
       .attr("stroke-opacity", 0.5)
+      .attr("d", path);
+  });
+
+  // d3.json(regionais, function(error, data) {
+  //   if (error) return console.error(error);
+    
+  //   var regionais = topojson.feature(data, data.objects.regionais);
+    
+
+  //     svg.select("g.regionais")
+  //     .append("path")
+  //     .datum(regionais)
+  //     .attr("fill", "none")
+  //     .attr("stroke", function(d){ return "#fff";})
+  //     .attr("stroke-width", 1)
+  //     .attr("stroke-opacity", 0.5)
+  //     .attr("d", path);
+  // });
+
+  d3.json(zonas, function(error, data) {
+    if (error) return console.error(error);
+    
+    var zonas = topojson.feature(data, data.objects.zonas);
+
+      svg.select("g.zonas")
+      .append("path")
+      .datum(zonas)
+      .attr("fill", "none")
+      .attr("stroke", function(d){ return "#f00";})
+      .attr("stroke-width", 1)
+      .attr("stroke-opacity", 1)
       .attr("d", path);
   });
 

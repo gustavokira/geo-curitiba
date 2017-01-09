@@ -43,3 +43,7 @@ mesmo problema com a definição da projeção: https://github.com/mbloch/mapsha
 https://medium.com/@mbostock/command-line-cartography-part-3-1158e4c55a1e#.g9dnr97lp
 
 geoproject 'd3.geoConicEqualArea().parallels([34, 40.5]).rotate([180, 0]).fitSize([960, 960], d)' < der.json > der-albers.json
+
+
+
+http://www.justicaeleitoral.jus.br/arquivos/tre-pr-elo-cadastro-eleitoral-enderecos-das-secoes-do-parana
