@@ -47,11 +47,11 @@ d3.json(base, function(error, data) {
     .fitSize([width, height],bairros);
     path = d3.geoPath().projection(projection);
 
-      // svg.select("g.base")
-      // .append("path")
-      // .datum(bairros)
-      // .attr("fill", "#000")
-      // .attr("d", path);
+      svg.select("g.base")
+      .append("path")
+      .datum(bairros)
+      .attr("fill", "#000")
+      .attr("d", path);
 
       cb();
   });
@@ -74,21 +74,21 @@ function cb(){
       .attr("d", path);
   });
 
-  // d3.json(regionais, function(error, data) {
-  //   if (error) return console.error(error);
+  d3.json(regionais, function(error, data) {
+    if (error) return console.error(error);
     
-  //   var regionais = topojson.feature(data, data.objects.regionais);
+    var regionais = topojson.feature(data, data.objects.regionais);
     
 
-  //     svg.select("g.regionais")
-  //     .append("path")
-  //     .datum(regionais)
-  //     .attr("fill", "none")
-  //     .attr("stroke", function(d){ return "#fff";})
-  //     .attr("stroke-width", 1)
-  //     .attr("stroke-opacity", 0.5)
-  //     .attr("d", path);
-  // });
+      svg.select("g.regionais")
+      .append("path")
+      .datum(regionais)
+      .attr("fill", "none")
+      .attr("stroke", function(d){ return "#fff";})
+      .attr("stroke-width", 1)
+      .attr("stroke-opacity", 0.5)
+      .attr("d", path);
+  });
 
   d3.json(zonas, function(error, data) {
     if (error) return console.error(error);
@@ -129,8 +129,5 @@ function cb(){
   });
 
 }
-
-
-
 </script>
 </body>

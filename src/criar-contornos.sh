@@ -52,7 +52,7 @@ topoquantize 1e5 \
 	> $DIR/divisa_de_regionais.topo.json	
 
 echo "criar malha de contorno de Curitiba"
-topomerge --mesh -f 'a == b' bairros=bairros \
+topomerge --mesh -f 'a == b' curitiba=bairros \
 	< $DIR/divisa_de_bairros_original.topo.json \
 	> $DIR/contorno_de_curitiba_mesh.topo.json
 
@@ -63,8 +63,6 @@ toposimplify -S $S_VALUE \
 topoquantize 1e5 \
 	$DIR/contorno_de_curitiba_quant.topo.json \
 	> $DIR/contorno_de_curitiba.topo.json
-
-
 
 echo "criar malha de divisa e contorno de Curitiba"
 topomerge --mesh zonas=zonas \
@@ -79,23 +77,9 @@ topoquantize 1e5 \
 	$DIR/divisa_e_contorno_de_zonas_eleitorais_quant.topo.json \
 	> $DIR/divisa_e_contorno_de_zonas_eleitorais.topo.json
 
-# echo "criar malha de divisa entre zonas eleitorais de Curitiba"
-# topomerge --mesh -f 'a !== b' zonas=zonas \
-# 	< $DIR/divisa_de_zonas_eleitorais_original.topo.json \
-# 	> $DIR/divisa_de_zonas_eleitorais_mesh.topo.json
-
-# toposimplify -S $S_VALUE \
-# 	< $DIR/divisa_de_zonas_eleitorais_mesh.topo.json \
-# 	> $DIR/divisa_de_zonas_eleitorais_quant.topo.json
-
-# topoquantize 1e5 \
-# 	$DIR/divisa_de_zonas_eleitorais_quant.topo.json \
-# 	> $DIR/divisa_de_zonas_eleitorais.topo.json		
-
 cp $DIR/divisa_e_contorno_de_bairros.topo.json json/divisa_e_contorno_de_bairros.topo.json
 cp $DIR/divisa_de_bairros.topo.json json/divisa_de_bairros.topo.json
 cp $DIR/divisa_de_regionais.topo.json json/divisa_de_regionais.topo.json
 cp $DIR/contorno_de_curitiba.topo.json json/contorno_de_curitiba.topo.json
-# cp $DIR/divisa_de_zonas_eleitorais.topo.json json/divisa_de_zonas_eleitorais.topo.json 
 cp $DIR/divisa_e_contorno_de_zonas_eleitorais.topo.json json/divisa_e_contorno_de_zonas_eleitorais.topo.json 
 rm -R $DIR/
