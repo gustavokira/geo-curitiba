@@ -1,13 +1,58 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
-<style>
+<head>
+  <link href="https://fonts.googleapis.com/css?family=Catamaran:400,700" rel="stylesheet">
+  <style>
 
 html{
+  font-family: 'Catamaran', sans-serif;
   background: #fff;
 }
 body{
   padding: 50px;
 }
+
+#mapa{
+  float:left;
+}
+#mapa-controle{
+  float: left;
+  width: 30%;
+}
+.controle-label{
+  float: left;
+font-weight: 700;
+text-transform: uppercase;
+  width: 100%;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 0px;
+  margin-bottom: 10px;
+  /*padding-left: 10px;*/
+  font-size: 11px;
+  color:#999;
+}
+
+.slider{
+  float: left;
+}
+
+.slider .label{
+  font-size: 11px;
+  fill:#999;
+  /*font-variant: small-caps;*/
+}
+
+.slider-container{
+  margin-bottom: 15px;
+  min-height: 1px;
+  float: left;
+}
+.slider-container span{
+  display: block;
+}
+
+
+
 
 
 .ticks {
@@ -21,9 +66,9 @@ body{
 }
 
 .track {
-  stroke: #000;
-  stroke-opacity: 0.3;
-  stroke-width: 10px;
+  stroke: #ccc;
+  /*stroke-opacity: 0.3;*/
+  stroke-width: 5px;
 }
 
 .track-inset {
@@ -38,66 +83,184 @@ body{
 
 .handle {
   fill: #fff;
-  stroke:#000;
-  stroke-opacity: 0.5;
-  stroke-width: 1.25px;
+  stroke:#666;
+  /*stroke-opacity: 0.5;*/
+  stroke-width: .5px;
+}
+
+#channel{
+  height: 16px;
+  margin-top: 2px;
+  margin-left: 4px;
+  margin-right:4px;
+  width: 80%;
+  float: left;
+}
+
+
+input.color{
+  float: left;
+  display: block;
+  width: 16px;
+  height: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  color: rgba(0, 0, 0, 0) !important;
+}
+
+.slider-container input.color{
+  margin-top: 16px;
+}
+
+#gradient.slider-container input.color{
+  margin-top: 0px;
+}
+
+#gradient{
+  margin-top: 10px;
 }
 
 
 </style>
+</head>
+
 <body>
+
 <script src="node_modules/d3/build/d3.min.js" charset="utf-8"></script>
 <script src="node_modules/topojson/dist/topojson.min.js" charset="utf-8"></script>
+<script src="node_modules/colorPicker/javascript_implementation/jsColorPicker.min.js" charset="utf-8"></script>
+<script src="node_modules/colorPicker/colors.js" charset="utf-8"></script>
 
 <script src="src/base.js" charset="utf-8"></script>
 <script src="src/lines.js" charset="utf-8"></script>
 <script src="src/areas.js" charset="utf-8"></script>
 <script src="src/slider.js" charset="utf-8"></script>
 
-<svg width="200" height="500"></svg>
+
+
+<svg id="mapa"></svg>
+
+<div id="mapa-controle">
+
+  
+    <div id="contorno-container" class="slider-container">
+      <span class="controle-label">contorno da cidade</span>
+      <input type="text" class="color" id="contorno-color" value="#333">
+    </div>
+
+    <div id="regionais-container" class="slider-container">
+      <span class="controle-label">regionais</span>
+      <input type="text" class="color" id="regionais-color" value="#333">
+    </div>
+
+    <div id="divisa-bairro-container" class="slider-container">
+      <span class="controle-label">divisa de bairros</span>
+      <input type="text" class="color" id="divisa-bairro-color" value="#333">
+    </div>
+
+
+  <div class="slider-container" id="gradient">
+<span class="controle-label">preenchimento bairros</span>
+<input type="text" class="color" id="area-color-min" value="#FFF">
+    <canvas id="channel"  width="900" height="1"></canvas>
+<input type="text" class="color" id="area-color-max" value="#0ff">
+
+  </div>
+
+</div>
 
 <script>
 
 
+    var colors = jsColorPicker('input.color', {
+        customBG: '#222',
+        readOnly: true,
+        size:2,
+        noAlpha:true,
+        init: function(elm, colors) {
+          elm.style.backgroundColor = elm.value;
+          elm.style.color = elm.value;
+        },
+        actionCallback:function(e, action){
+          update();
+        }
+      });
 
-var divisaBairrosSliderWidth = new Slider("dbs",50,200);
+var div = d3.select("#mapa-controle");
+
+var divisaBairrosSliderWidth = new Slider("dbs",d3.select("#divisa-bairro-container"),50,200);
+divisaBairrosSliderWidth.label="espessura";
+
 divisaBairrosSliderWidth.init();
 divisaBairrosSliderWidth.updateCb = function(h){
   divisaBairros.values.stroke.width = h;
   divisaBairros.update();
 }
 
-var divisaBairrosSliderOpacity = new Slider("dbs",50,100);
+var divisaBairrosSliderOpacity = new Slider("dbs",d3.select("#divisa-bairro-container"),50,100);
+divisaBairrosSliderOpacity.label="opacidade";
 divisaBairrosSliderOpacity.min = 0;
 divisaBairrosSliderOpacity.max = 1;
 divisaBairrosSliderOpacity.ticks = 3;
 divisaBairrosSliderOpacity.scale = d3.scaleLinear();
+
 divisaBairrosSliderOpacity.init();
 divisaBairrosSliderOpacity.updateCb = function(h){
   divisaBairros.values.stroke.opacity = h;
   divisaBairros.update();
 }
 
-var contornoCuritibaSlider = new Slider("ccs",50,200);
-// contornoCuritibaSlider.init();
-contornoCuritibaSlider.updateCb = function(h){
+var contornoCuritibaSliderWidth = new Slider("ccs",d3.select("#contorno-container"),50,200);
+contornoCuritibaSliderWidth.label="espessura";
+
+contornoCuritibaSliderWidth.init();
+contornoCuritibaSliderWidth.updateCb = function(h){
   contornoCuritiba.values.stroke.width = h;
   contornoCuritiba.update();
 }
 
-var divisaRegionaisSlider = new Slider("drs",50,200);
-// divisaRegionaisSlider.init();
+var contornoCuritibaSliderOpacity = new Slider("dbs",d3.select("#contorno-container"),50,100);
+contornoCuritibaSliderOpacity.min = 0;
+contornoCuritibaSliderOpacity.max = 1;
+contornoCuritibaSliderOpacity.ticks = 3;
+contornoCuritibaSliderOpacity.scale = d3.scaleLinear();
+contornoCuritibaSliderOpacity.label="opacidade";
+
+contornoCuritibaSliderOpacity.init();
+contornoCuritibaSliderOpacity.updateCb = function(h){
+  contornoCuritiba.values.stroke.opacity = h;
+  contornoCuritiba.update();
+}
+
+var divisaRegionaisSlider = new Slider("drs",d3.select("#regionais-container"),50,200);
+divisaRegionaisSlider.label="espessura";
+
+divisaRegionaisSlider.init();
 divisaRegionaisSlider.updateCb = function(h){
   divisaRegionais.values.stroke.width = h;
   divisaRegionais.update();
 }
 
-var zonasEleitoraisSlider = new Slider("ze",50,200);
-// zonasEleitoraisSlider.init();
-zonasEleitoraisSlider.updateCb = function(h){
-  zonasEleitorais.values.stroke.width = h;
-  zonasEleitorais.update();
+var divisaRegionaisSliderOpacity = new Slider("dbs",d3.select("#regionais-container"),50,100);
+divisaRegionaisSliderOpacity.min = 0;
+divisaRegionaisSliderOpacity.max = 1;
+divisaRegionaisSliderOpacity.ticks = 3;
+divisaRegionaisSliderOpacity.scale = d3.scaleLinear();
+divisaRegionaisSliderOpacity.label="opacidade";
+
+divisaRegionaisSliderOpacity.init();
+divisaRegionaisSliderOpacity.updateCb = function(h){
+  divisaRegionais.values.stroke.opacity = h;
+  divisaRegionais.update();
 }
+
+
+// var zonasEleitoraisSlider = new Slider("ze",div,50,200);
+// zonasEleitoraisSlider.init();
+// zonasEleitoraisSlider.updateCb = function(h){
+//   zonasEleitorais.values.stroke.width = h;
+//   zonasEleitorais.update();
+// }
 
 var bairrosTemp = {
   9:{codigo:9,nome:"ÁGUA VERDE", value:0},
@@ -177,10 +340,67 @@ var bairrosTemp = {
   63:{codigo:63,nome:"SANTA FELICIDADE",value:0}
 }
 
-var width = 800,
-    height = 800;
+function der(bairrosTemp){
+var margin = {top: 20, right: 20, bottom: 30, left: 40},
+    width = 960 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
 
-var svg = d3.select("body").append("svg")
+// set the ranges
+var x = d3.scaleBand()
+          .range([0, width])
+          .padding(0.1);
+var y = d3.scaleLinear()
+          .range([height, 0]);
+          
+// append the svg object to the body of the page
+// append a 'group' element to 'svg'
+// moves the 'group' element to the top left margin
+var svg = d3.select("#mapa").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", 
+          "translate(" + margin.left + "," + margin.top + ")");
+
+// get the data
+  var t = [];
+  var nomes = [];
+  for(var idx in bairrosTemp){
+    t.push(bairrosTemp[idx]);
+    nomes.push(bairrosTemp[idx].nome);
+  }
+
+  // Scale the range of the data in the domains
+  x.domain(nomes);
+  y.domain([0, d3.max(t, function(d) { return d.value; })]);
+
+  // append the rectangles for the bar chart
+  svg.selectAll(".bar")
+      .data(t)
+    .enter().append("rect")
+      .attr("class", "bar")
+      .attr("x", function(d) { return x(d.nome); })
+      .attr("width", x.bandwidth())
+      .attr("y", function(d) { return y(d.value); })
+      .attr("height", function(d) { return height - y(d.value); });
+
+  // add the x Axis
+  svg.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x));
+
+  // add the y Axis
+  svg.append("g")
+      .call(d3.axisLeft(y));
+}
+
+
+
+
+var width = 600,
+    height = 500;
+
+var svg = d3.select("#mapa")
     .attr("width", width)
     .attr("height", height);
 
@@ -194,11 +414,19 @@ var scaleOptions = {
   'logE':{
     'name': 'log e',
     'scale':d3.scaleLog().base(Math.E)
+  },
+  'linear':{
+    'name': 'linear',
+    'scale':d3.scaleLinear()
   }
 }
 
 var currentState = {
-  scale: scaleOptions.logE.scale
+  scale: scaleOptions.powtwo.scale,
+  color:{
+    min:"#fff",
+    max:"#000"
+  }
 }
 
 var base = new Base(svg);
@@ -228,13 +456,17 @@ zonasEleitorais.values.stroke.width = 0;
 
 base.load()
   .then(function(data){
-    console.log(data);
+    // console.log(data);
 
   bairros.raw.forEach(function(r){
       bairrosTemp[r.properties.codigo].value = r.properties.area;
       r.value = bairrosTemp[r.properties.codigo].value;
-      console.log(r.properties.codigo, bairrosTemp[r.properties.codigo]);
+      // console.log(r.properties.codigo, bairrosTemp[r.properties.codigo]);
   });
+
+  // der(bairrosTemp);
+
+  render(d3.select("#channel"));
 
   },function(err){
     console.log(err);
@@ -242,17 +474,59 @@ base.load()
 
 
 function update(){
+
+  currentState.color.min = d3.select("#area-color-min").node().value;
+  currentState.color.max = d3.select("#area-color-max").node().value;
+
+  divisaBairros.values.stroke.color = d3.select("#divisa-bairro-color").node().value;
+  contornoCuritiba.values.stroke.color = d3.select("#contorno-color").node().value;
+  divisaRegionais.values.stroke.color = d3.select("#regionais-color").node().value;
+
+
   bairros.colorScale = currentState.scale
       .interpolate(d3.interpolateHcl)
-      .range([d3.rgb("#fff"), d3.rgb('#333')]);
+      .range([d3.rgb(currentState.color.min), d3.rgb(currentState.color.max)]);
+
 
   bairros.update();
   divisaBairros.update();
+  contornoCuritiba.update();
+  divisaRegionais.update();
+
+  render(d3.select("#channel"));
 }
 
+
+
+
+function render(canvas) {
+
+  var channel = currentState.scale.interpolate(d3.interpolateHcl)
+  .range([d3.rgb(currentState.color.min), d3.rgb(currentState.color.max)])
+  .domain([0.1,900]);
+
+  var width = 900,
+      context = canvas.node().getContext("2d"),
+      image = context.createImageData(width, 1);
+      i = -1;
+
+
+      
+  for (var x = 0; x < width; ++x) {
+          
+      var c = channel(x);
+      var rgb = d3.rgb(c);
+      image.data[++i] = rgb.r;
+      image.data[++i] = rgb.g;
+     image.data[++i] = rgb.b;
+     image.data[++i] = 255;
+  }
+
+  context.putImageData(image, 0, 0);
+}
+
+
+
+
 </script>
-
-<input type="text" value="#333">
-
-<button onclick="update()"></button>
 </body>

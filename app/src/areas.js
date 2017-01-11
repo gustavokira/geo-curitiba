@@ -68,7 +68,9 @@ function Areas (name,topo) {
 			.data(self.raw);
 
 		
-		old.attr("fill", function(d){ return self.colorScale(d.value);})
+		old
+		.attr("stroke", function(d){ return self.colorScale(d.value);})
+		.attr("fill", function(d){ return self.colorScale(d.value);});
 			
 		self.root.exit().remove();
 	}

@@ -1,4 +1,4 @@
-function Slider(name,height,width){
+function Slider(name,root, height,width){
 
   var self = this;
 
@@ -14,23 +14,32 @@ function Slider(name,height,width){
   this.slider;
   this.scale = d3.scalePow().exponent(1/2);
   this.ticks = 5;
+  this.root = root;
+  this.label = "";
 
   self.margin = {right: 15, left: 15};
 
   this.init = function init(){
     self.innerWidth = self.width - self.margin.left - self.margin.right;
       
-      self.x = self.scale
+    self.x = self.scale
       .domain([this.min, this.max])
       .range([0, this.innerWidth])
       .clamp(true);
 
-       self.svg = d3.select("body").append("svg")
+    self.svg = self.root.append("svg")
       .attr("class","slider")
       .attr("id",self.name)
       .attr("width", self.width)
       .attr("height", self.height);
 
+    self.svg.append("text")
+      .attr("class","label")
+       // .attr("width", self.width+"px")
+       // .attr("height", 20+"px")
+      .attr("x", 10)
+      .attr("y", 10)
+      .text(self.label);
 
     
   self.slider = self.svg.append("g")
