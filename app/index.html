@@ -4,145 +4,194 @@
   <link href="https://fonts.googleapis.com/css?family=Catamaran:400,700" rel="stylesheet">
   <style>
 
-html{
-  font-family: 'Catamaran', sans-serif;
-  background: #fff;
-}
-body{
-  padding: 50px;
-}
+    html{
+      font-family: 'Catamaran', sans-serif;
+      background: #fff;
+    }
+    body{
+      padding: 50px;
+    }
 
-#mapa{
-  float:left;
-}
-#mapa-controle{
-  float: left;
-  width: 30%;
-}
-.controle-label{
-  float: left;
-font-weight: 700;
-text-transform: uppercase;
-  width: 100%;
-  border-bottom: 1px solid #ddd;
-  padding-bottom: 0px;
-  margin-bottom: 10px;
-  /*padding-left: 10px;*/
-  font-size: 11px;
-  color:#999;
-}
+    #mapa{
+      float:left;
+      width: 50%;
+    }
+    #mapa-controle{
+      float: left;
+      width: 30%;
+    }
+  #mapa-apoio{
+    float: left;
+    width: 20%;
+  }
 
-.slider{
-  float: left;
-}
+    .controle-label{
+      float: left;
+      font-weight: 700;
+      text-transform: uppercase;
+      width: 100%;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 0px;
+      margin-bottom: 10px;
+      font-size: 11px;
+      color:#999;
+    }
 
-.slider .label{
-  font-size: 11px;
-  fill:#999;
-  /*font-variant: small-caps;*/
-}
+    .slider{
+      float: left;
+    }
 
-.slider-container{
-  margin-bottom: 15px;
-  min-height: 1px;
-  float: left;
-}
-.slider-container span{
-  display: block;
-}
+    .slider .label{
+      font-size: 11px;
+      fill:#999;
+      /*font-variant: small-caps;*/
+    }
 
-
-
-
-
-.ticks {
-  font: 9px sans-serif;
-}
-
-.track,
-.track-inset,
-.track-overlay {
-  stroke-linecap: round;
-}
-
-.track {
-  stroke: #ccc;
-  /*stroke-opacity: 0.3;*/
-  stroke-width: 5px;
-}
-
-.track-inset {
-  stroke-width: 8px;
-}
-
-.track-overlay {
-  pointer-events: stroke;
-  stroke-width: 50px;
-  cursor: pointer;
-}
-
-.handle {
-  fill: #fff;
-  stroke:#666;
-  /*stroke-opacity: 0.5;*/
-  stroke-width: .5px;
-}
-
-#channel{
-  height: 16px;
-  margin-top: 2px;
-  margin-left: 4px;
-  margin-right:4px;
-  width: 80%;
-  float: left;
-}
+    .slider-container{
+      margin-bottom: 15px;
+      min-height: 1px;
+      float: left;
+    }
+    .slider-container span{
+      display: block;
+    }
 
 
-input.color{
-  float: left;
-  display: block;
-  width: 16px;
-  height: 16px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  color: rgba(0, 0, 0, 0) !important;
-}
-
-.slider-container input.color{
-  margin-top: 16px;
-}
-
-#gradient.slider-container input.color{
-  margin-top: 0px;
-}
-
-#gradient{
-  margin-top: 10px;
-}
 
 
-</style>
+
+    .ticks {
+      font: 9px sans-serif;
+    }
+
+    .track,
+    .track-inset,
+    .track-overlay {
+      stroke-linecap: round;
+    }
+
+    .track {
+      stroke: #ccc;
+      /*stroke-opacity: 0.3;*/
+      stroke-width: 5px;
+    }
+
+    .track-inset {
+      stroke-width: 8px;
+    }
+
+    .track-overlay {
+      pointer-events: stroke;
+      stroke-width: 50px;
+      cursor: pointer;
+    }
+
+    .handle {
+      fill: #fff;
+      stroke:#666;
+      /*stroke-opacity: 0.5;*/
+      stroke-width: .5px;
+    }
+
+    #channel{
+      height: 16px;
+      margin-top: 2px;
+      margin-left: 4px;
+      margin-right:4px;
+      width: 80%;
+      float: left;
+    }
+
+    .bar{
+      fill:#999;
+    }
+
+
+    input.color{
+      float: left;
+      display: block;
+      width: 16px;
+      height: 16px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      color: rgba(0, 0, 0, 0) !important;
+    }
+
+    .slider-container input.color{
+      margin-top: 16px;
+    }
+
+    #gradient.slider-container input.color{
+      margin-top: 0px;
+    }
+
+    #gradient{
+      margin-top: 10px;
+    }
+
+    .line{
+      width: 100%;
+      float: left;
+      margin-bottom: 5px;
+    }
+
+  </style>
 </head>
 
 <body>
 
-<script src="node_modules/d3/build/d3.min.js" charset="utf-8"></script>
-<script src="node_modules/topojson/dist/topojson.min.js" charset="utf-8"></script>
-<script src="node_modules/colorPicker/javascript_implementation/jsColorPicker.min.js" charset="utf-8"></script>
-<script src="node_modules/colorPicker/colors.js" charset="utf-8"></script>
+  <script src="node_modules/d3/build/d3.min.js" charset="utf-8"></script>
+  <script src="node_modules/topojson/dist/topojson.min.js" charset="utf-8"></script>
+  <script src="node_modules/colorPicker/javascript_implementation/jsColorPicker.min.js" charset="utf-8"></script>
+  <script src="node_modules/colorPicker/colors.js" charset="utf-8"></script>
 
-<script src="src/base.js" charset="utf-8"></script>
-<script src="src/lines.js" charset="utf-8"></script>
-<script src="src/areas.js" charset="utf-8"></script>
-<script src="src/slider.js" charset="utf-8"></script>
+  <script src="src/base.js" charset="utf-8"></script>
+  <script src="src/lines.js" charset="utf-8"></script>
+  <script src="src/areas.js" charset="utf-8"></script>
+  <script src="src/slider.js" charset="utf-8"></script>
 
 
+<div id="mapa-apoio">
+  <svg id="histograma"></svg>
+  </div>
 
-<svg id="mapa"></svg>
+  <svg id="mapa"></svg>
 
-<div id="mapa-controle">
+  <div id="mapa-controle">
 
-  
+    <div class="slider-container" id="gradient">
+      <span class="controle-label">preenchimento bairros</span>
+
+      <div class="line">
+        <select name="" id="select-scale" onchange="update()">
+          <option value="powtwo" selected>exponencial 2</option>
+          <option value="powe">exponencial e</option>
+          <option value="logE">log e</option>
+          <option value="linear">linear</option>
+          <option value="sqrt">raiz quadrada</option>
+        </select>
+
+        <select name="" id="select-interpolation" onchange="update()">
+          <option value="hcl" selected>hcl</option>
+          <option value="lab">lab</option>
+        </select>
+
+      </div>
+      
+      <div class="line">
+        <input type="text" class="color" id="area-color-min" value="#FFF">
+        <canvas id="channel"  width="900" height="1"></canvas>
+        <input type="text" class="color" id="area-color-max" value="#0ff">
+      </div>
+     
+
+    </div>
+
+    <div id="divisa-bairro-container" class="slider-container">
+      <span class="controle-label">divisa de bairros</span>
+      <input type="text" class="color" id="divisa-bairro-color" value="#333">
+    </div>
+
     <div id="contorno-container" class="slider-container">
       <span class="controle-label">contorno da cidade</span>
       <input type="text" class="color" id="contorno-color" value="#333">
@@ -153,106 +202,95 @@ input.color{
       <input type="text" class="color" id="regionais-color" value="#333">
     </div>
 
-    <div id="divisa-bairro-container" class="slider-container">
-      <span class="controle-label">divisa de bairros</span>
-      <input type="text" class="color" id="divisa-bairro-color" value="#333">
-    </div>
 
-
-  <div class="slider-container" id="gradient">
-<span class="controle-label">preenchimento bairros</span>
-<input type="text" class="color" id="area-color-min" value="#FFF">
-    <canvas id="channel"  width="900" height="1"></canvas>
-<input type="text" class="color" id="area-color-max" value="#0ff">
 
   </div>
 
-</div>
+  <script>
 
-<script>
 
 
     var colors = jsColorPicker('input.color', {
-        customBG: '#222',
-        readOnly: true,
-        size:2,
-        noAlpha:true,
-        init: function(elm, colors) {
-          elm.style.backgroundColor = elm.value;
-          elm.style.color = elm.value;
-        },
-        actionCallback:function(e, action){
-          update();
-        }
-      });
+      customBG: '#222',
+      readOnly: true,
+      size:2,
+      noAlpha:true,
+      init: function(elm, colors) {
+        elm.style.backgroundColor = elm.value;
+        elm.style.color = elm.value;
+      },
+      actionCallback:function(e, action){
+        update();
+      }
+    });
 
-var div = d3.select("#mapa-controle");
+    var div = d3.select("#mapa-controle");
 
-var divisaBairrosSliderWidth = new Slider("dbs",d3.select("#divisa-bairro-container"),50,200);
-divisaBairrosSliderWidth.label="espessura";
+    var divisaBairrosSliderWidth = new Slider("dbs",d3.select("#divisa-bairro-container"),50,200);
+    divisaBairrosSliderWidth.label="espessura";
 
-divisaBairrosSliderWidth.init();
-divisaBairrosSliderWidth.updateCb = function(h){
-  divisaBairros.values.stroke.width = h;
-  divisaBairros.update();
-}
+    divisaBairrosSliderWidth.init();
+    divisaBairrosSliderWidth.updateCb = function(h){
+      divisaBairros.values.stroke.width = h;
+      divisaBairros.update();
+    }
 
-var divisaBairrosSliderOpacity = new Slider("dbs",d3.select("#divisa-bairro-container"),50,100);
-divisaBairrosSliderOpacity.label="opacidade";
-divisaBairrosSliderOpacity.min = 0;
-divisaBairrosSliderOpacity.max = 1;
-divisaBairrosSliderOpacity.ticks = 3;
-divisaBairrosSliderOpacity.scale = d3.scaleLinear();
+    var divisaBairrosSliderOpacity = new Slider("dbs",d3.select("#divisa-bairro-container"),50,100);
+    divisaBairrosSliderOpacity.label="opacidade";
+    divisaBairrosSliderOpacity.min = 0;
+    divisaBairrosSliderOpacity.max = 1;
+    divisaBairrosSliderOpacity.ticks = 3;
+    divisaBairrosSliderOpacity.scale = d3.scaleLinear();
 
-divisaBairrosSliderOpacity.init();
-divisaBairrosSliderOpacity.updateCb = function(h){
-  divisaBairros.values.stroke.opacity = h;
-  divisaBairros.update();
-}
+    divisaBairrosSliderOpacity.init();
+    divisaBairrosSliderOpacity.updateCb = function(h){
+      divisaBairros.values.stroke.opacity = h;
+      divisaBairros.update();
+    }
 
-var contornoCuritibaSliderWidth = new Slider("ccs",d3.select("#contorno-container"),50,200);
-contornoCuritibaSliderWidth.label="espessura";
+    var contornoCuritibaSliderWidth = new Slider("ccs",d3.select("#contorno-container"),50,200);
+    contornoCuritibaSliderWidth.label="espessura";
 
-contornoCuritibaSliderWidth.init();
-contornoCuritibaSliderWidth.updateCb = function(h){
-  contornoCuritiba.values.stroke.width = h;
-  contornoCuritiba.update();
-}
+    contornoCuritibaSliderWidth.init();
+    contornoCuritibaSliderWidth.updateCb = function(h){
+      contornoCuritiba.values.stroke.width = h;
+      contornoCuritiba.update();
+    }
 
-var contornoCuritibaSliderOpacity = new Slider("dbs",d3.select("#contorno-container"),50,100);
-contornoCuritibaSliderOpacity.min = 0;
-contornoCuritibaSliderOpacity.max = 1;
-contornoCuritibaSliderOpacity.ticks = 3;
-contornoCuritibaSliderOpacity.scale = d3.scaleLinear();
-contornoCuritibaSliderOpacity.label="opacidade";
+    var contornoCuritibaSliderOpacity = new Slider("dbs",d3.select("#contorno-container"),50,100);
+    contornoCuritibaSliderOpacity.min = 0;
+    contornoCuritibaSliderOpacity.max = 1;
+    contornoCuritibaSliderOpacity.ticks = 3;
+    contornoCuritibaSliderOpacity.scale = d3.scaleLinear();
+    contornoCuritibaSliderOpacity.label="opacidade";
 
-contornoCuritibaSliderOpacity.init();
-contornoCuritibaSliderOpacity.updateCb = function(h){
-  contornoCuritiba.values.stroke.opacity = h;
-  contornoCuritiba.update();
-}
+    contornoCuritibaSliderOpacity.init();
+    contornoCuritibaSliderOpacity.updateCb = function(h){
+      contornoCuritiba.values.stroke.opacity = h;
+      contornoCuritiba.update();
+    }
 
-var divisaRegionaisSlider = new Slider("drs",d3.select("#regionais-container"),50,200);
-divisaRegionaisSlider.label="espessura";
+    var divisaRegionaisSlider = new Slider("drs",d3.select("#regionais-container"),50,200);
+    divisaRegionaisSlider.label="espessura";
 
-divisaRegionaisSlider.init();
-divisaRegionaisSlider.updateCb = function(h){
-  divisaRegionais.values.stroke.width = h;
-  divisaRegionais.update();
-}
+    divisaRegionaisSlider.init();
+    divisaRegionaisSlider.updateCb = function(h){
+      divisaRegionais.values.stroke.width = h;
+      divisaRegionais.update();
+    }
 
-var divisaRegionaisSliderOpacity = new Slider("dbs",d3.select("#regionais-container"),50,100);
-divisaRegionaisSliderOpacity.min = 0;
-divisaRegionaisSliderOpacity.max = 1;
-divisaRegionaisSliderOpacity.ticks = 3;
-divisaRegionaisSliderOpacity.scale = d3.scaleLinear();
-divisaRegionaisSliderOpacity.label="opacidade";
+    var divisaRegionaisSliderOpacity = new Slider("dbs",d3.select("#regionais-container"),50,100);
+    divisaRegionaisSliderOpacity.min = 0;
+    divisaRegionaisSliderOpacity.max = 1;
+    divisaRegionaisSliderOpacity.ticks = 3;
+    divisaRegionaisSliderOpacity.scale = d3.scaleLinear();
+    divisaRegionaisSliderOpacity.label="opacidade";
 
-divisaRegionaisSliderOpacity.init();
-divisaRegionaisSliderOpacity.updateCb = function(h){
-  divisaRegionais.values.stroke.opacity = h;
-  divisaRegionais.update();
-}
+    divisaRegionaisSliderOpacity.init();
+    divisaRegionaisSliderOpacity.updateCb = function(h){
+      divisaRegionais.values.stroke.opacity = h;
+      divisaRegionais.update();
+    }
 
 
 // var zonasEleitoraisSlider = new Slider("ze",div,50,200);
@@ -341,34 +379,39 @@ var bairrosTemp = {
 }
 
 function der(bairrosTemp){
-var margin = {top: 20, right: 20, bottom: 30, left: 40},
-    width = 960 - margin.left - margin.right,
-    height = 500 - margin.top - margin.bottom;
-
+  // var margin = {top: 10, right: 10, bottom: 10, left: 10},
+  // width = 100 - margin.left - margin.right,
+  // height = 100 - margin.top - margin.bottom;
+  var width = 100;
+  var height = 100;
 // set the ranges
 var x = d3.scaleBand()
-          .range([0, width])
-          .padding(0.1);
+.range([0, width])
+.padding(0.1);
 var y = d3.scaleLinear()
-          .range([height, 0]);
-          
+.range([height, 0]);
+
 // append the svg object to the body of the page
 // append a 'group' element to 'svg'
 // moves the 'group' element to the top left margin
-var svg = d3.select("#mapa").append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-  .append("g")
-    .attr("transform", 
-          "translate(" + margin.left + "," + margin.top + ")");
+var svg = d3.select("#histograma")
+    // .attr("width", width + margin.left + margin.right)
+    // .attr("height", height + margin.top + margin.bottom)
+    .attr("width", '100%')
+    .attr("height", '100%')
+    .attr('viewBox','0 0 '+Math.min(width,height)+' '+Math.min(width,height))
+    .attr('preserveAspectRatio','xMinYMin')
+    .append("g")
+    // .attr("transform", 
+      // "translate(" + margin.left + "," + margin.top + ")");
 
 // get the data
-  var t = [];
-  var nomes = [];
-  for(var idx in bairrosTemp){
-    t.push(bairrosTemp[idx]);
-    nomes.push(bairrosTemp[idx].nome);
-  }
+var t = [];
+var nomes = [];
+for(var idx in bairrosTemp){
+  t.push(bairrosTemp[idx]);
+  nomes.push(bairrosTemp[idx].nome);
+}
 
   // Scale the range of the data in the domains
   x.domain(nomes);
@@ -376,33 +419,33 @@ var svg = d3.select("#mapa").append("svg")
 
   // append the rectangles for the bar chart
   svg.selectAll(".bar")
-      .data(t)
-    .enter().append("rect")
-      .attr("class", "bar")
-      .attr("x", function(d) { return x(d.nome); })
-      .attr("width", x.bandwidth())
-      .attr("y", function(d) { return y(d.value); })
-      .attr("height", function(d) { return height - y(d.value); });
+  .data(t)
+  .enter().append("rect")
+  .attr("class", "bar")
+  .attr("x", function(d) { return x(d.nome); })
+  .attr("width", x.bandwidth())
+  .attr("y", function(d) { return y(d.value); })
+  .attr("height", function(d) { return height - y(d.value); });
 
   // add the x Axis
   svg.append("g")
-      .attr("transform", "translate(0," + height + ")")
-      .call(d3.axisBottom(x));
+  .attr("transform", "translate(0," + height + ")")
+  .call(d3.axisBottom(x));
 
   // add the y Axis
-  svg.append("g")
-      .call(d3.axisLeft(y));
+  // svg.append("g")
+  // .call(d3.axisLeft(y));
 }
 
 
 
 
 var width = 600,
-    height = 500;
+height = 500;
 
 var svg = d3.select("#mapa")
-    .attr("width", width)
-    .attr("height", height);
+.attr("width", width)
+.attr("height", height);
 
 
 
@@ -410,6 +453,14 @@ var scaleOptions = {
   'powtwo':{
     'name': 'exponencial 2',
     'scale':d3.scalePow().exponent(2)
+  },
+  'powe':{
+    'name': 'exponencial e',
+    'scale':d3.scalePow().exponent(Math.E)
+  },
+  'sqrt':{
+    'name': 'raiz quadrada',
+    'scale':d3.scalePow().exponent(1/2)
   },
   'logE':{
     'name': 'log e',
@@ -420,9 +471,15 @@ var scaleOptions = {
     'scale':d3.scaleLinear()
   }
 }
+//https://gist.github.com/mbostock/3014589
+var interpolationOptions = {
+  lab:d3.interpolateLab,
+  hcl:d3.interpolateHcl
+}
 
 var currentState = {
   scale: scaleOptions.powtwo.scale,
+  interpolation:interpolationOptions.lab,
   color:{
     min:"#fff",
     max:"#000"
@@ -455,22 +512,24 @@ contornoCuritiba.values.stroke.width = 1;
 zonasEleitorais.values.stroke.width = 0;
 
 base.load()
-  .then(function(data){
+.then(function(data){
     // console.log(data);
 
-  bairros.raw.forEach(function(r){
+    bairros.raw.forEach(function(r){
       bairrosTemp[r.properties.codigo].value = r.properties.area;
       r.value = bairrosTemp[r.properties.codigo].value;
       // console.log(r.properties.codigo, bairrosTemp[r.properties.codigo]);
-  });
+    });
 
   // der(bairrosTemp);
 
   render(d3.select("#channel"));
 
-  },function(err){
-    console.log(err);
-  })
+  update();
+
+},function(err){
+  console.log(err);
+})
 
 
 function update(){
@@ -478,14 +537,21 @@ function update(){
   currentState.color.min = d3.select("#area-color-min").node().value;
   currentState.color.max = d3.select("#area-color-max").node().value;
 
+  currentState.scale = scaleOptions[d3.select("#select-scale").node().options[d3.select("#select-scale").node().selectedIndex].value].scale;
+
+
+  var idx = d3.select("#select-interpolation").node().options[d3.select("#select-interpolation").node().selectedIndex].value;
+  currentState.interpolation = interpolationOptions[idx];
+
   divisaBairros.values.stroke.color = d3.select("#divisa-bairro-color").node().value;
   contornoCuritiba.values.stroke.color = d3.select("#contorno-color").node().value;
   divisaRegionais.values.stroke.color = d3.select("#regionais-color").node().value;
 
 
+
   bairros.colorScale = currentState.scale
-      .interpolate(d3.interpolateHcl)
-      .range([d3.rgb(currentState.color.min), d3.rgb(currentState.color.max)]);
+  .interpolate(currentState.interpolation)
+  .range([d3.rgb(currentState.color.min), d3.rgb(currentState.color.max)]);
 
 
   bairros.update();
@@ -494,6 +560,7 @@ function update(){
   divisaRegionais.update();
 
   render(d3.select("#channel"));
+  der(bairrosTemp);
 }
 
 
@@ -501,25 +568,25 @@ function update(){
 
 function render(canvas) {
 
-  var channel = currentState.scale.interpolate(d3.interpolateHcl)
+  var channel = currentState.scale.interpolate(currentState.interpolation)
   .range([d3.rgb(currentState.color.min), d3.rgb(currentState.color.max)])
   .domain([0.1,900]);
 
   var width = 900,
-      context = canvas.node().getContext("2d"),
-      image = context.createImageData(width, 1);
-      i = -1;
+  context = canvas.node().getContext("2d"),
+  image = context.createImageData(width, 1);
+  i = -1;
 
 
-      
+
   for (var x = 0; x < width; ++x) {
-          
-      var c = channel(x);
-      var rgb = d3.rgb(c);
-      image.data[++i] = rgb.r;
-      image.data[++i] = rgb.g;
-     image.data[++i] = rgb.b;
-     image.data[++i] = 255;
+
+    var c = channel(x);
+    var rgb = d3.rgb(c);
+    image.data[++i] = rgb.r;
+    image.data[++i] = rgb.g;
+    image.data[++i] = rgb.b;
+    image.data[++i] = 255;
   }
 
   context.putImageData(image, 0, 0);
