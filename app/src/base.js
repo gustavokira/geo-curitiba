@@ -1,4 +1,4 @@
-function Base (svg) {
+function Base (svg,width,height) {
 	
 	var self = this;
 
@@ -6,6 +6,8 @@ function Base (svg) {
 	this.projection;
 	this.path;
 	this.raw;
+	this.width = width;
+	this.height = height;
 	
 	this.svg = svg;
 	this.svg.append("g").attr("class","base");
@@ -33,7 +35,7 @@ function Base (svg) {
 
 					self.projection = d3.geoMercator()
 						.rotate([0, 0])
-						.fitSize([width, height],curitiba);
+						.fitSize([self.width, self.height],curitiba);
 
 					self.path = d3.geoPath()
 						.projection(self.projection);

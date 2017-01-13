@@ -2,140 +2,7 @@
 <meta charset="utf-8">
 <head>
   <link href="https://fonts.googleapis.com/css?family=Catamaran:400,700" rel="stylesheet">
-  <style>
-
-    html{
-      font-family: 'Catamaran', sans-serif;
-      background: #fff;
-    }
-    body{
-      padding: 50px;
-    }
-
-    #mapa{
-      float:left;
-      width: 50%;
-    }
-    #mapa-controle{
-      float: left;
-      width: 30%;
-    }
-  #mapa-apoio{
-    float: left;
-    width: 20%;
-  }
-
-    .controle-label{
-      float: left;
-      font-weight: 700;
-      text-transform: uppercase;
-      width: 100%;
-      border-bottom: 1px solid #ddd;
-      padding-bottom: 0px;
-      margin-bottom: 10px;
-      font-size: 11px;
-      color:#999;
-    }
-
-    .slider{
-      float: left;
-    }
-
-    .slider .label{
-      font-size: 11px;
-      fill:#999;
-      /*font-variant: small-caps;*/
-    }
-
-    .slider-container{
-      margin-bottom: 15px;
-      min-height: 1px;
-      float: left;
-    }
-    .slider-container span{
-      display: block;
-    }
-
-
-
-
-
-    .ticks {
-      font: 9px sans-serif;
-    }
-
-    .track,
-    .track-inset,
-    .track-overlay {
-      stroke-linecap: round;
-    }
-
-    .track {
-      stroke: #ccc;
-      /*stroke-opacity: 0.3;*/
-      stroke-width: 5px;
-    }
-
-    .track-inset {
-      stroke-width: 8px;
-    }
-
-    .track-overlay {
-      pointer-events: stroke;
-      stroke-width: 50px;
-      cursor: pointer;
-    }
-
-    .handle {
-      fill: #fff;
-      stroke:#666;
-      /*stroke-opacity: 0.5;*/
-      stroke-width: .5px;
-    }
-
-    #channel{
-      height: 16px;
-      margin-top: 2px;
-      margin-left: 4px;
-      margin-right:4px;
-      width: 80%;
-      float: left;
-    }
-
-    .bar{
-      fill:#999;
-    }
-
-
-    input.color{
-      float: left;
-      display: block;
-      width: 16px;
-      height: 16px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      color: rgba(0, 0, 0, 0) !important;
-    }
-
-    .slider-container input.color{
-      margin-top: 16px;
-    }
-
-    #gradient.slider-container input.color{
-      margin-top: 0px;
-    }
-
-    #gradient{
-      margin-top: 10px;
-    }
-
-    .line{
-      width: 100%;
-      float: left;
-      margin-bottom: 5px;
-    }
-
-  </style>
+  <link href="style/main.css" rel="stylesheet">
 </head>
 
 <body>
@@ -145,152 +12,161 @@
   <script src="node_modules/colorPicker/javascript_implementation/jsColorPicker.min.js" charset="utf-8"></script>
   <script src="node_modules/colorPicker/colors.js" charset="utf-8"></script>
 
+  <script src="src/core.js" charset="utf-8"></script>
   <script src="src/base.js" charset="utf-8"></script>
   <script src="src/lines.js" charset="utf-8"></script>
   <script src="src/areas.js" charset="utf-8"></script>
   <script src="src/slider.js" charset="utf-8"></script>
+  <script src="src/table.js" charset="utf-8"></script>
 
 
-<div id="mapa-apoio">
+<!-- <div id="mapa-apoio">
   <svg id="histograma"></svg>
   </div>
+-->
+<div id="mapa-controle">
 
-  <svg id="mapa"></svg>
+  <div class="slider-container" id="gradient">
+    <span class="controle-label">preenchimento bairros</span>
 
-  <div id="mapa-controle">
+    <div class="line">
+      <select name="" id="select-scale" onchange="update()">
+        <option value="4" selected>linear</option>
+        <option value="0">exponencial 2</option>
+        <option value="1">exponencial e</option>
+        <option value="3">log e</option>
+        <option value="2">raiz quadrada</option>
+        <option value="5">log 10</option>
+      </select>
 
-    <div class="slider-container" id="gradient">
-      <span class="controle-label">preenchimento bairros</span>
-
-      <div class="line">
-        <select name="" id="select-scale" onchange="update()">
-          <option value="powtwo" selected>exponencial 2</option>
-          <option value="powe">exponencial e</option>
-          <option value="logE">log e</option>
-          <option value="linear">linear</option>
-          <option value="sqrt">raiz quadrada</option>
-        </select>
-
-        <select name="" id="select-interpolation" onchange="update()">
-          <option value="hcl" selected>hcl</option>
-          <option value="lab">lab</option>
-        </select>
-
-      </div>
-      
-      <div class="line">
-        <input type="text" class="color" id="area-color-min" value="#FFF">
-        <canvas id="channel"  width="900" height="1"></canvas>
-        <input type="text" class="color" id="area-color-max" value="#0ff">
-      </div>
-     
+      <select name="" id="select-interpolation" onchange="update()">
+        <option value="hcl" selected>hcl</option>
+        <option value="lab">lab</option>
+      </select>
 
     </div>
 
-    <div id="divisa-bairro-container" class="slider-container">
-      <span class="controle-label">divisa de bairros</span>
-      <input type="text" class="color" id="divisa-bairro-color" value="#333">
+    <div class="line">
+      <input type="text" class="color" id="area-color-min" value="#FFF">
+      <canvas id="channel"  width="900" height="1"></canvas>
+      <input type="text" class="color" id="area-color-max" value="#0ff">
     </div>
-
-    <div id="contorno-container" class="slider-container">
-      <span class="controle-label">contorno da cidade</span>
-      <input type="text" class="color" id="contorno-color" value="#333">
-    </div>
-
-    <div id="regionais-container" class="slider-container">
-      <span class="controle-label">regionais</span>
-      <input type="text" class="color" id="regionais-color" value="#333">
-    </div>
-
 
 
   </div>
 
-  <script>
+  <div id="divisa-bairro-container" class="slider-container">
+    <span class="controle-label">divisa de bairros</span>
+    <input type="text" class="color" id="divisa-bairro-color" value="#333">
+  </div>
+
+  <div id="contorno-container" class="slider-container">
+    <span class="controle-label">contorno da cidade</span>
+    <input type="text" class="color" id="contorno-color" value="#333">
+  </div>
+
+  <div id="regionais-container" class="slider-container">
+    <span class="controle-label">regionais</span>
+    <input type="text" class="color" id="regionais-color" value="#333">
+  </div>
+</div>
+
+<svg id="mapa"></svg>
 
 
+<div id="table"></div>
 
-    var colors = jsColorPicker('input.color', {
-      customBG: '#222',
-      readOnly: true,
-      size:2,
-      noAlpha:true,
-      init: function(elm, colors) {
-        elm.style.backgroundColor = elm.value;
-        elm.style.color = elm.value;
-      },
-      actionCallback:function(e, action){
-        update();
-      }
-    });
 
-    var div = d3.select("#mapa-controle");
+<script>
 
-    var divisaBairrosSliderWidth = new Slider("dbs",d3.select("#divisa-bairro-container"),50,200);
-    divisaBairrosSliderWidth.label="espessura";
+  var core = new Core();
+  var bairrosTemp = core.bairros;
+  var currentState = core.currentState;
+  var scaleOptions = core.scaleOptions;
+  var interpolationOptions = core.interpolationOptions;
 
-    divisaBairrosSliderWidth.init();
-    divisaBairrosSliderWidth.updateCb = function(h){
-      divisaBairros.values.stroke.width = h;
-      divisaBairros.update();
+
+  var colors = jsColorPicker('input.color', {
+    customBG: '#222',
+    readOnly: true,
+    size:2,
+    noAlpha:true,
+    init: function(elm, colors) {
+      elm.style.backgroundColor = elm.value;
+      elm.style.color = elm.value;
+    },
+    actionCallback:function(e, action){
+      update();
     }
+  });
 
-    var divisaBairrosSliderOpacity = new Slider("dbs",d3.select("#divisa-bairro-container"),50,100);
-    divisaBairrosSliderOpacity.label="opacidade";
-    divisaBairrosSliderOpacity.min = 0;
-    divisaBairrosSliderOpacity.max = 1;
-    divisaBairrosSliderOpacity.ticks = 3;
-    divisaBairrosSliderOpacity.scale = d3.scaleLinear();
+  var div = d3.select("#mapa-controle");
 
-    divisaBairrosSliderOpacity.init();
-    divisaBairrosSliderOpacity.updateCb = function(h){
-      divisaBairros.values.stroke.opacity = h;
-      divisaBairros.update();
-    }
+  var divisaBairrosSliderWidth = new Slider("dbs",d3.select("#divisa-bairro-container"),50,200);
+  divisaBairrosSliderWidth.label="espessura";
 
-    var contornoCuritibaSliderWidth = new Slider("ccs",d3.select("#contorno-container"),50,200);
-    contornoCuritibaSliderWidth.label="espessura";
+  divisaBairrosSliderWidth.init();
+  divisaBairrosSliderWidth.updateCb = function(h){
+    divisaBairros.values.stroke.width = h;
+    divisaBairros.update();
+  }
 
-    contornoCuritibaSliderWidth.init();
-    contornoCuritibaSliderWidth.updateCb = function(h){
-      contornoCuritiba.values.stroke.width = h;
-      contornoCuritiba.update();
-    }
+  var divisaBairrosSliderOpacity = new Slider("dbs",d3.select("#divisa-bairro-container"),50,100);
+  divisaBairrosSliderOpacity.label="opacidade";
+  divisaBairrosSliderOpacity.min = 0;
+  divisaBairrosSliderOpacity.max = 1;
+  divisaBairrosSliderOpacity.ticks = 3;
+  divisaBairrosSliderOpacity.scale = d3.scaleLinear();
 
-    var contornoCuritibaSliderOpacity = new Slider("dbs",d3.select("#contorno-container"),50,100);
-    contornoCuritibaSliderOpacity.min = 0;
-    contornoCuritibaSliderOpacity.max = 1;
-    contornoCuritibaSliderOpacity.ticks = 3;
-    contornoCuritibaSliderOpacity.scale = d3.scaleLinear();
-    contornoCuritibaSliderOpacity.label="opacidade";
+  divisaBairrosSliderOpacity.init();
+  divisaBairrosSliderOpacity.updateCb = function(h){
+    divisaBairros.values.stroke.opacity = h;
+    divisaBairros.update();
+  }
 
-    contornoCuritibaSliderOpacity.init();
-    contornoCuritibaSliderOpacity.updateCb = function(h){
-      contornoCuritiba.values.stroke.opacity = h;
-      contornoCuritiba.update();
-    }
+  var contornoCuritibaSliderWidth = new Slider("ccs",d3.select("#contorno-container"),50,200);
+  contornoCuritibaSliderWidth.label="espessura";
 
-    var divisaRegionaisSlider = new Slider("drs",d3.select("#regionais-container"),50,200);
-    divisaRegionaisSlider.label="espessura";
+  contornoCuritibaSliderWidth.init();
+  contornoCuritibaSliderWidth.updateCb = function(h){
+    contornoCuritiba.values.stroke.width = h;
+    contornoCuritiba.update();
+  }
 
-    divisaRegionaisSlider.init();
-    divisaRegionaisSlider.updateCb = function(h){
-      divisaRegionais.values.stroke.width = h;
-      divisaRegionais.update();
-    }
+  var contornoCuritibaSliderOpacity = new Slider("dbs",d3.select("#contorno-container"),50,100);
+  contornoCuritibaSliderOpacity.min = 0;
+  contornoCuritibaSliderOpacity.max = 1;
+  contornoCuritibaSliderOpacity.ticks = 3;
+  contornoCuritibaSliderOpacity.scale = d3.scaleLinear();
+  contornoCuritibaSliderOpacity.label="opacidade";
 
-    var divisaRegionaisSliderOpacity = new Slider("dbs",d3.select("#regionais-container"),50,100);
-    divisaRegionaisSliderOpacity.min = 0;
-    divisaRegionaisSliderOpacity.max = 1;
-    divisaRegionaisSliderOpacity.ticks = 3;
-    divisaRegionaisSliderOpacity.scale = d3.scaleLinear();
-    divisaRegionaisSliderOpacity.label="opacidade";
+  contornoCuritibaSliderOpacity.init();
+  contornoCuritibaSliderOpacity.updateCb = function(h){
+    contornoCuritiba.values.stroke.opacity = h;
+    contornoCuritiba.update();
+  }
 
-    divisaRegionaisSliderOpacity.init();
-    divisaRegionaisSliderOpacity.updateCb = function(h){
-      divisaRegionais.values.stroke.opacity = h;
-      divisaRegionais.update();
-    }
+  var divisaRegionaisSlider = new Slider("drs",d3.select("#regionais-container"),50,200);
+  divisaRegionaisSlider.label="espessura";
+
+  divisaRegionaisSlider.init();
+  divisaRegionaisSlider.updateCb = function(h){
+    divisaRegionais.values.stroke.width = h;
+    divisaRegionais.update();
+  }
+
+  var divisaRegionaisSliderOpacity = new Slider("dbs",d3.select("#regionais-container"),50,100);
+  divisaRegionaisSliderOpacity.min = 0;
+  divisaRegionaisSliderOpacity.max = 1;
+  divisaRegionaisSliderOpacity.ticks = 3;
+  divisaRegionaisSliderOpacity.scale = d3.scaleLinear();
+  divisaRegionaisSliderOpacity.label="opacidade";
+
+  divisaRegionaisSliderOpacity.init();
+  divisaRegionaisSliderOpacity.updateCb = function(h){
+    divisaRegionais.values.stroke.opacity = h;
+    divisaRegionais.update();
+  }
 
 
 // var zonasEleitoraisSlider = new Slider("ze",div,50,200);
@@ -300,83 +176,7 @@
 //   zonasEleitorais.update();
 // }
 
-var bairrosTemp = {
-  9:{codigo:9,nome:"ÁGUA VERDE", value:0},
-  18:{codigo:18,nome:"JARDIM SOCIAL", value:0},
-  57:{codigo:57,nome:"XAXIM", value:0},
-  22:{codigo:22,nome:"JARDIM DAS AMÉRICAS", value:0},
-  26:{codigo:26,nome:"GUAÍRA", value:0},
-  36:{codigo:36,nome:"BAIRRO ALTO", value:0},
-  2:{codigo:2,nome:"SÃO FRANCISCO", value:0},
-  4:{codigo:4,nome:"ALTO DA GLÓRIA", value:0},
-  55:{codigo:55,nome:"ATUBA", value:0},
-  16:{codigo:16,nome:"CABRAL", value:0},
-  40:{codigo:40,nome:"LINDÓIA", value:0},
-  44:{codigo:44,nome:"CAMPO COMPRIDO", value:0},
-  3:{codigo:3,nome:"CENTRO CÍVICO", value:0},
-  15:{codigo:15,nome:"JUVEVÊ", value:0},
-  17:{codigo:17,nome:"HUGO LANGE", value:0},
-  20:{codigo:20,nome:"CAPÃO DA IMBUIA", value:0},
-  29:{codigo:29,nome:"SEMINÁRIO", value:0},
-  23:{codigo:23,nome:"GUABIROTUBA", value:0},
-  24:{codigo:24,nome:"PRADO VELHO", value:0},
-  25:{codigo:25,nome:"PAROLIN", value:0},
-  27:{codigo:27,nome:"PORTÃO", value:0},
-  28:{codigo:28,nome:"VILA IZABEL", value:0},
-  30:{codigo:30,nome:"CAMPINA DO SIQUEIRA", value:0},
-  34:{codigo:34,nome:"BOA VISTA", value:0},
-  14:{codigo:14,nome:"AHÚ", value:0},
-  6:{codigo:6,nome:"CRISTO REI", value:0},
-  8:{codigo:8,nome:"REBOUÇAS", value:0},
-  59:{codigo:59,nome:"ORLEANS", value:0},
-  32:{codigo:32,nome:"PILARZINHO", value:0},
-  45:{codigo:45,nome:"MOSSUNGUÊ", value:0},
-  5:{codigo:5,nome:"ALTO DA RUA XV", value:0},
-  7:{codigo:7,nome:"JARDIM BOTÂNICO", value:0},
-  61:{codigo:61,nome:"BUTIATUVINHA", value:0},
-  52:{codigo:52,nome:"BARREIRINHA", value:0},
-  54:{codigo:54,nome:"TINGUI", value:0},
-  56:{codigo:56,nome:"BOQUEIRÃO", value:0},
-  69:{codigo:69,nome:"RIVIERA", value:0},
-  65:{codigo:65,nome:"SÍTIO CERCADO", value:0},
-  19:{codigo:19,nome:"TARUMÃ", value:0},
-  33:{codigo:33,nome:"SÃO LOURENÇO", value:0},
-  35:{codigo:35,nome:"BACACHERI", value:0},
-  11:{codigo:11,nome:"BIGORRILHO", value:0},
-  13:{codigo:13,nome:"BOM RETIRO", value:0},
-  58:{codigo:58,nome:"CAPÃO RASO", value:0},
-  38:{codigo:38,nome:"HAUER", value:0},
-  39:{codigo:39,nome:"FANNY", value:0},
-  41:{codigo:41,nome:"NOVO MUNDO", value:0},
-  42:{codigo:42,nome:"FAZENDINHA", value:0},
-  43:{codigo:43,nome:"SANTA QUITÉRIA", value:0},
-  1:{codigo:1,nome:"CENTRO", value:0},
-  50:{codigo:50,nome:"ABRANCHES", value:0},
-  10:{codigo:10,nome:"BATEL", value:0},
-  67:{codigo:67,nome:"SÃO MIGUEL", value:0},
-  68:{codigo:68,nome:"AUGUSTA", value:0},
-  70:{codigo:70,nome:"CAXIMBA", value:0},
-  64:{codigo:64,nome:"ALTO BOQUEIRÃO", value:0},
-  66:{codigo:66,nome:"PINHEIRINHO", value:0},
-  74:{codigo:74,nome:"TATUQUARA", value:0},
-  73:{codigo:73,nome:"UMBARÁ", value:0},
-  71:{codigo:71,nome:"CAMPO DE SANTANA", value:0},
-  72:{codigo:72,nome:"GANCHINHO", value:0},
-  21:{codigo:21,nome:"CAJURU", value:0},
-  37:{codigo:37,nome:"UBERABA", value:0},
-  49:{codigo:49,nome:"TABOÃO", value:0},
-  51:{codigo:51,nome:"CACHOEIRA", value:0},
-  53:{codigo:53,nome:"SANTA CÂNDIDA", value:0},
-  75:{codigo:75,nome:"CIDADE INDUSTRIAL DE CURITIBA", value:0},
-  62:{codigo:62,nome:"LAMENHA PEQUENA", value:0},
-  12:{codigo:12,nome:"MERCÊS", value:0},
-  46:{codigo:46,nome:"SANTO INÁCIO", value:0},
-  31:{codigo:31,nome:"VISTA ALEGRE", value:0},
-  60:{codigo:60,nome:"SÃO BRAZ", value:0},
-  48:{codigo:48,nome:"SÃO JOÃO", value:0},
-  47:{codigo:47,nome:"CASCATINHA", value:0},
-  63:{codigo:63,nome:"SANTA FELICIDADE",value:0}
-}
+
 
 function der(bairrosTemp){
   // var margin = {top: 10, right: 10, bottom: 10, left: 10},
@@ -406,10 +206,9 @@ var svg = d3.select("#histograma")
       // "translate(" + margin.left + "," + margin.top + ")");
 
 // get the data
-var t = [];
+var t = Object.values(bairrosTemp);
 var nomes = [];
 for(var idx in bairrosTemp){
-  t.push(bairrosTemp[idx]);
   nomes.push(bairrosTemp[idx].nome);
 }
 
@@ -441,57 +240,26 @@ for(var idx in bairrosTemp){
 
 
 var width = 600,
-height = 500;
+height = 800;
 
 var svg = d3.select("#mapa")
-.attr("width", width)
-.attr("height", height);
+// .attr("width", '100%')
+    // .attr("height", '100%')
+    .attr("width", width)
+    .attr("height", height)
+    .attr('viewBox','0 0 '+Math.min(width,height)+' '+Math.min(width,height))
+    .attr('preserveAspectRatio','xMinYMin');
 
 
 
-var scaleOptions = {
-  'powtwo':{
-    'name': 'exponencial 2',
-    'scale':d3.scalePow().exponent(2)
-  },
-  'powe':{
-    'name': 'exponencial e',
-    'scale':d3.scalePow().exponent(Math.E)
-  },
-  'sqrt':{
-    'name': 'raiz quadrada',
-    'scale':d3.scalePow().exponent(1/2)
-  },
-  'logE':{
-    'name': 'log e',
-    'scale':d3.scaleLog().base(Math.E)
-  },
-  'linear':{
-    'name': 'linear',
-    'scale':d3.scaleLinear()
-  }
-}
-//https://gist.github.com/mbostock/3014589
-var interpolationOptions = {
-  lab:d3.interpolateLab,
-  hcl:d3.interpolateHcl
-}
 
-var currentState = {
-  scale: scaleOptions.powtwo.scale,
-  interpolation:interpolationOptions.lab,
-  color:{
-    min:"#fff",
-    max:"#000"
-  }
-}
 
-var base = new Base(svg);
-var divisaBairros = new Lines("divisabairros",{url:"data/divisa_de_bairros.topo.json",name:"bairros"});
-var divisaRegionais = new Lines("regionais",{url:"data/divisa_de_regionais.topo.json",name:"regionais"});
-var contornoCuritiba = new Lines("contorno",{url:"data/contorno_de_curitiba.topo.json",name:"curitiba"});
-var zonasEleitorais = new Lines("zonas",{url:"data/divisa_e_contorno_de_zonas_eleitorais.topo.json",name:"zonas"});
-var bairros = new Areas("bairros",{url:"data/bairros.topo.json",name:"bairros"});
+    var base = new Base(svg,width,height);
+    var divisaBairros = new Lines("divisabairros",{url:"data/divisa_de_bairros.topo.json",name:"bairros"});
+    var divisaRegionais = new Lines("regionais",{url:"data/divisa_de_regionais.topo.json",name:"regionais"});
+    var contornoCuritiba = new Lines("contorno",{url:"data/contorno_de_curitiba.topo.json",name:"curitiba"});
+    var zonasEleitorais = new Lines("zonas",{url:"data/divisa_e_contorno_de_zonas_eleitorais.topo.json",name:"zonas"});
+    var bairros = new Areas("bairros",{url:"data/bairros.topo.json",name:"bairros"});
 
 //ordem de inscricao na base define order no "plano 2d" ultimo = cima, primeiro = baixo
 base.addChild(bairros);
@@ -511,22 +279,26 @@ contornoCuritiba.values.stroke.width = 1;
 
 zonasEleitorais.values.stroke.width = 0;
 
+
+var table = new Table();
+table.updateCb = function(){
+  update();
+}
+
+
 base.load()
 .then(function(data){
-    // console.log(data);
 
-    bairros.raw.forEach(function(r){
-      bairrosTemp[r.properties.codigo].value = r.properties.area;
-      r.value = bairrosTemp[r.properties.codigo].value;
-      // console.log(r.properties.codigo, bairrosTemp[r.properties.codigo]);
-    });
+  bairros.raw.forEach(function(r){
+    bairrosTemp[r.properties.codigo].value = r.properties.area;
+    r.value = bairrosTemp[r.properties.codigo].value;
+  });
 
-  // der(bairrosTemp);
-
-  render(d3.select("#channel"));
+  table.elements = Object.values(bairrosTemp);
+  table.init();
 
   update();
-
+  
 },function(err){
   console.log(err);
 })
@@ -537,8 +309,8 @@ function update(){
   currentState.color.min = d3.select("#area-color-min").node().value;
   currentState.color.max = d3.select("#area-color-max").node().value;
 
-  currentState.scale = scaleOptions[d3.select("#select-scale").node().options[d3.select("#select-scale").node().selectedIndex].value].scale;
-
+  // currentState.scale = scaleOptions[d3.select("#select-scale").node().options[d3.select("#select-scale").node().selectedIndex].value].scale;
+  currentState.scale = d3.select("#select-scale").node().options[d3.select("#select-scale").node().selectedIndex].value;
 
   var idx = d3.select("#select-interpolation").node().options[d3.select("#select-interpolation").node().selectedIndex].value;
   currentState.interpolation = interpolationOptions[idx];
@@ -547,20 +319,34 @@ function update(){
   contornoCuritiba.values.stroke.color = d3.select("#contorno-color").node().value;
   divisaRegionais.values.stroke.color = d3.select("#regionais-color").node().value;
 
+  bairros.raw.forEach(function(r){
+    r.value = bairrosTemp[r.properties.codigo].value;
+  });
 
-
-  bairros.colorScale = currentState.scale
-  .interpolate(currentState.interpolation)
+  
+  var currentColorScale = core.getCurrentScale(parseInt(currentState.scale))
+  
+  currentColorScale.interpolate(currentState.interpolation)
   .range([d3.rgb(currentState.color.min), d3.rgb(currentState.color.max)]);
 
-
+  bairros.colorScale = currentColorScale;
   bairros.update();
+
   divisaBairros.update();
   contornoCuritiba.update();
   divisaRegionais.update();
 
+  
+  table.colorScale = currentColorScale;
+  table.valueScale = core.getCurrentScale(parseInt(currentState.scale));
+  table.update(Object.values(core.bairros));
+
   render(d3.select("#channel"));
   der(bairrosTemp);
+  
+  // table.update();
+  
+  console.log("update")
 }
 
 
@@ -568,7 +354,7 @@ function update(){
 
 function render(canvas) {
 
-  var channel = currentState.scale.interpolate(currentState.interpolation)
+  var channel = core.getCurrentScale(parseInt(currentState.scale)).interpolate(currentState.interpolation)
   .range([d3.rgb(currentState.color.min), d3.rgb(currentState.color.max)])
   .domain([0.1,900]);
 
@@ -591,9 +377,6 @@ function render(canvas) {
 
   context.putImageData(image, 0, 0);
 }
-
-
-
 
 </script>
 </body>
