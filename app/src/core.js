@@ -134,7 +134,7 @@ function Core () {
   }
 
   this.currentState = {
-    scale: self.LINEAR,
+    scale: self.SQRT,
     interpolation: this.interpolationOptions.lab,
     color:{
       min:"#fff",

@@ -15,16 +15,10 @@ function Table(){
     .selectAll("svg").selectAll(".mini-bar")
     
     old
-      .attr("fill",function(d){ return self.colorScale(d.value);});
-
-    // old.select("svg").select("rect.mini-bar")
-      // 
-    old
-    .attr("width",function(d){
-      console.log((100*self.valueScale(d.value/max)))
-      return ((100*self.valueScale(d.value/max)))+"%";
-    })
-
+      .attr("fill",function(d){ return self.colorScale(d.value);})
+      .attr("width",function(d){
+        return (5+(95*(self.valueScale(100*d.value/max)/self.valueScale(100))))+"%";
+      })
   }
 
 
@@ -44,12 +38,6 @@ function Table(){
       .append("rect")
         .attr("class","mini-bar")
         .attr("width","100%")
-      // .attr("width",function(d){
-      //   console.log(d.nome);
-      //   console.log(d.value);
-      //   console.log(currentState.scale(d.value));
-      //   return Math.round(d.value/max)+"%";
-      // })
       .attr("height",2)
       .attr("fill",function(d){ return "#333";});
 
@@ -60,7 +48,7 @@ function Table(){
       .append("input")
       .attr("value",function(d){ return d.value;})
       .on("input",function(d){
-        d.value = this.value;
+        d.value = parseInt(this.value);
         self.updateCb();
       });
   }

@@ -28,28 +28,31 @@
 
   <div class="slider-container" id="gradient">
     <span class="controle-label">preenchimento bairros</span>
-
+    
+    
     <div class="line">
+      <label>função:</label>
       <select name="" id="select-scale" onchange="update()">
-        <option value="4" selected>linear</option>
+        <option value="4">linear</option>
         <option value="0">exponencial 2</option>
         <option value="1">exponencial e</option>
         <option value="3">log e</option>
-        <option value="2">raiz quadrada</option>
+        <option value="2" selected>raiz quadrada</option>
         <option value="5">log 10</option>
       </select>
-
+      
+      <label>interpolação:</label>
       <select name="" id="select-interpolation" onchange="update()">
-        <option value="hcl" selected>hcl</option>
-        <option value="lab">lab</option>
+        <option value="hcl">hcl</option>
+        <option value="lab" selected>lab</option>
       </select>
 
     </div>
 
     <div class="line">
-      <input type="text" class="color" id="area-color-min" value="#FFF">
+      <input type="text" class="color" id="area-color-min" value="#EBE7BD">
       <canvas id="channel"  width="900" height="1"></canvas>
-      <input type="text" class="color" id="area-color-max" value="#0ff">
+      <input type="text" class="color" id="area-color-max" value="#F5A700">
     </div>
 
 
@@ -57,17 +60,17 @@
 
   <div id="divisa-bairro-container" class="slider-container">
     <span class="controle-label">divisa de bairros</span>
-    <input type="text" class="color" id="divisa-bairro-color" value="#333">
+    <input type="text" class="color" id="divisa-bairro-color" value="#666">
   </div>
 
   <div id="contorno-container" class="slider-container">
     <span class="controle-label">contorno da cidade</span>
-    <input type="text" class="color" id="contorno-color" value="#333">
+    <input type="text" class="color" id="contorno-color" value="#999">
   </div>
 
   <div id="regionais-container" class="slider-container">
     <span class="controle-label">regionais</span>
-    <input type="text" class="color" id="regionais-color" value="#333">
+    <input type="text" class="color" id="regionais-color" value="#666">
   </div>
 </div>
 
